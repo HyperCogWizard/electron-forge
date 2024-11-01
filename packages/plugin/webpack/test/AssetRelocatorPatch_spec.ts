@@ -63,8 +63,9 @@ function createSimpleDevServer(rendererOut: string): http.Server {
         res.writeHead(200);
         res.end(data);
       } catch (err) {
-        res.writeHead(404);
-        res.end(JSON.stringify(err));
+        console.error("Error reading file:", err); // Log the error on the server
+        res.writeHead(500);
+        res.end("An error occurred while processing your request."); // Send a generic error message to the client
       }
     })
     .listen(3000);
