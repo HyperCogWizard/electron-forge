@@ -52,7 +52,12 @@ function createSimpleDevServer(rendererOut: string): http.Server {
     .createServer(async (req, res) => {
       const url = req.url || '';
       const file = url.endsWith('main_window') ? path.join(url, '/index.html') : url;
-      const fullPath = path.join(rendererOut, file);
+      const fullPath = path.resolve(rendererOut, file);
+      if (!fullPath.startsWith(rendererOut)) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+      }
       try {
         const data = await readFile(fullPath);
         res.writeHead(200);
